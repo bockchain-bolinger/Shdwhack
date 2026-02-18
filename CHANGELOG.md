@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.0.0
+- Added structured JSON log output via `--json`.
+- Added timestamped log format for text output.
+- Added robust argument parsing with one-action validation.
+- Added `mkdir` lock fallback when `flock` is unavailable.
+- Expanded regression tests for JSON output and invalid multi-action usage.
+
 ## 6.0.0
 - Added process lock protection (`flock`) to prevent concurrent runs.
 - Added `--no-banner` for cleaner non-TTY/automation output.

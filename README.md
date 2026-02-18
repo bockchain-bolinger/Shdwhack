@@ -1,5 +1,5 @@
 Author : nischal-sketch21
-### Version 6
+### Version 7
 ![image](Shdwtool.png)
 
 # Shdwhack (hardened maintenance edition)
@@ -11,7 +11,8 @@ This repository ships a security-hardened local maintenance shell.
 - Deterministic exit codes
 - Interactive and non-interactive usage
 - Offline local usage guide (`USAGE.md`)
-- Single-process lock protection via `flock`
+- Single-process lock protection (`flock` with `mkdir` fallback)
+- JSON logs via `--json` for automation
 
 ## Interactive run
 ```bash
@@ -29,6 +30,7 @@ bash shdwhack.sh --help
 ## Optional flags
 ```bash
 bash shdwhack.sh --no-banner
+bash shdwhack.sh --json --usage
 ```
 
 ## Tests

@@ -22,7 +22,11 @@ bash shdwhack.sh --help
 Optional:
 ```bash
 bash shdwhack.sh --no-banner
+bash shdwhack.sh --json --usage
 ```
+
+Notes:
+- At most one action flag is allowed per command.
 
 ## Exit codes
 - `0`: success

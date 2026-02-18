@@ -19,14 +19,18 @@
 3. Non-interactive CLI-Flags ergänzt (`--prepare-tools`, `--remove-tools`, `--usage`, `--open-guide`, `--help`).
 4. Lokale Offlinenutzung mit `USAGE.md`.
 5. Prozesssperre via `flock` gegen parallele Ausführung ergänzt.
+6. Fallback-Mechanismus via `mkdir`-Lock ergänzt, falls `flock` fehlt.
+7. Robustes Argument-Parsing mit „max. eine Action“ ergänzt.
 
 ### Quality
 1. CI-Workflow für `bash -n` + `shellcheck` ergänzt.
 2. `CHANGELOG.md` für versionsklare Nachvollziehbarkeit ergänzt.
 3. Regressions-Testscript `tests/test_cli.sh` ergänzt und in CI integriert.
 4. Optionales `--no-banner` für cleaner Automation-Output ergänzt.
+5. JSON-Logs via `--json` für Maschinenlesbarkeit ergänzt.
+6. Zeitgestempelte Textlogs ergänzt.
 
 ## Offene nächste Schritte
 1. Optional Integrationstests via `bats` hinzufügen.
-2. Optional erweitertes Logging mit Zeitstempeln ergänzen.
-3. Optional `--json` Output für bessere Maschinenlesbarkeit ergänzen.
+2. Optional Security-Scans (z. B. secret scan) in CI ergänzen.
+3. Optional erweiterte Health-/Self-check Option (`--self-check`) ergänzen.
