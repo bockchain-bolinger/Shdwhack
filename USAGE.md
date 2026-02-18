@@ -19,6 +19,11 @@ bash shdwhack.sh --remove-tools
 bash shdwhack.sh --help
 ```
 
+Optional:
+```bash
+bash shdwhack.sh --no-banner
+```
+
 ## Exit codes
 - `0`: success
 - `2`: invalid input

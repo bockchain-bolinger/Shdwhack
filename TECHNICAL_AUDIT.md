@@ -18,12 +18,15 @@
 2. Deterministische Exit-Codes definiert (`0`, `2`, `3`, `64`).
 3. Non-interactive CLI-Flags ergänzt (`--prepare-tools`, `--remove-tools`, `--usage`, `--open-guide`, `--help`).
 4. Lokale Offlinenutzung mit `USAGE.md`.
+5. Prozesssperre via `flock` gegen parallele Ausführung ergänzt.
 
 ### Quality
 1. CI-Workflow für `bash -n` + `shellcheck` ergänzt.
 2. `CHANGELOG.md` für versionsklare Nachvollziehbarkeit ergänzt.
+3. Regressions-Testscript `tests/test_cli.sh` ergänzt und in CI integriert.
+4. Optionales `--no-banner` für cleaner Automation-Output ergänzt.
 
 ## Offene nächste Schritte
 1. Optional Integrationstests via `bats` hinzufügen.
-2. Optional Lockfile (`flock`) für parallele Ausführung ergänzen.
-3. Optional TTY-sensitives Rendering (`--no-banner`) ergänzen.
+2. Optional erweitertes Logging mit Zeitstempeln ergänzen.
+3. Optional `--json` Output für bessere Maschinenlesbarkeit ergänzen.

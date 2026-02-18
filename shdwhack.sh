@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly VERSION="5"
+readonly VERSION="6"
 readonly TOOLS_DIR="Tools"
 readonly USAGE_FILE="USAGE.md"
 readonly USAGE_URL="https://pasteio.com/xuCvIkXdNRIB"
+readonly LOCK_FILE=".shdwhack.lock"
 
 readonly EXIT_SUCCESS=0
 readonly EXIT_INVALID_INPUT=2
 readonly EXIT_RUNTIME_ERROR=3
 readonly EXIT_USAGE_ERROR=64
+
+SHOW_BANNER=true
 
 log() {
   printf '[INFO] %s\n' "$*"
@@ -23,7 +26,19 @@ err() {
   printf '[ERROR] %s\n' "$*" >&2
 }
 
+acquire_lock() {
+  exec 9>"$LOCK_FILE"
+  if ! flock -n 9; then
+    err "Another shdwhack process is already running."
+    exit "$EXIT_RUNTIME_ERROR"
+  fi
+}
+
 show_banner() {
+  if [[ "$SHOW_BANNER" != true ]] || [[ ! -t 1 ]]; then
+    return
+  fi
+
   clear >/dev/null 2>&1 || true
   cat <<'BANNER'
 ███████╗██╗  ██╗██████╗ ██╗    ██╗   ████████╗ ██████╗  ██████╗ ██╗
@@ -55,6 +70,7 @@ Options:
   --remove-tools    Remove local Tools/ directory
   --usage           Print local usage guide
   --open-guide      Open online usage guide in browser
+  --no-banner       Disable interactive banner rendering
   --help            Show this help message
 
 Exit codes:
@@ -135,6 +151,9 @@ run_non_interactive() {
     --open-guide)
       open_online_usage_guide
       ;;
+    --no-banner)
+      SHOW_BANNER=false
+      ;;
     --help)
       show_help
       ;;
@@ -147,6 +166,8 @@ run_non_interactive() {
 }
 
 main() {
+  acquire_lock
+
   if [[ $# -gt 0 ]]; then
     run_non_interactive "$1"
     exit $?

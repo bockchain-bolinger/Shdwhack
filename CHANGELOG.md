@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.0
+- Added process lock protection (`flock`) to prevent concurrent runs.
+- Added `--no-banner` for cleaner non-TTY/automation output.
+- Added CLI regression test script at `tests/test_cli.sh`.
+- Extended CI workflow to execute the CLI regression tests.
+
 ## 5.0.0
 - Added deterministic CLI flags (`--prepare-tools`, `--remove-tools`, `--usage`, `--open-guide`, `--help`).
 - Added deterministic exit codes for success, invalid input, runtime errors, and usage errors.
