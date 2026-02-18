@@ -1,27 +1,36 @@
 Author : nischal-sketch21
-### Version 3
+### Version 5
 ![image](Shdwtool.png)
 
-# Hacking Tools
-This Tools help you with ethical hacking, Social media hack, phone info, Gmail attack, phone number attack, user discovery, Anonymous-sms, Webcam Hack, Powerful DDOS attack tool.
+# Shdwhack (hardened maintenance edition)
+This repository ships a security-hardened local maintenance shell.
 
-# Operating System Requirements
-Works on any of the following operating systems:
+## Highlights
+- Strict bash mode (`set -euo pipefail`)
+- Safe allowlist menu (only local maintenance actions)
+- Deterministic exit codes
+- Interactive and non-interactive usage
+- Offline local usage guide (`USAGE.md`)
 
-• Android (Using the Termux App)
+## Interactive run
+```bash
+bash shdwhack.sh
+```
 
-• Kali-Linux (Debian Based Systems)
+## Non-interactive run
+```bash
+bash shdwhack.sh --prepare-tools
+bash shdwhack.sh --usage
+bash shdwhack.sh --remove-tools
+bash shdwhack.sh --help
+```
 
-# How to Install
-* Open the terminal and type `<pkg install git>`
-* Then`<git clone https://github.com/nischal-sketch21/Shdwhack.git>`
-* `<cd Shdwhack>`
-* `<bash Shdwhack.sh>`
+## Files
+- `shdwhack.sh`: main script
+- `USAGE.md`: operational usage guide
+- `SECURITY.md`: security policy
+- `CHANGELOG.md`: release notes
+- `.github/workflows/shell-quality.yml`: CI checks (`bash -n` + `shellcheck`)
 
-
-# Warning
-
-We are not responsible for any misuse or damage caused by this program. Use this tool at your own risk!
-
-
-❤️ Support me:
+## Security note
+Use this project only for legal and authorized security learning workflows.

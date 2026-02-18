@@ -1,227 +1,182 @@
-clear
-mkdir Tools
-clear 
-echo -e '\033[31;40;1m 
-███████╗██╗  ██╗██████╗ ██╗    ██╗   ████████╗ ██████╗  ██████╗ ██╗     
-██╔════╝██║  ██║██╔══██╗██║    ██║   ╚══██╔══╝██╔═══██╗██╔═══██╗██║     
-███████╗███████║██║  ██║██║ █╗ ██║█████╗██║   ██║   ██║██║   ██║██║     
-╚════██║██╔══██║██║  ██║██║███╗██║╚════╝██║   ██║   ██║██║   ██║██║     
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly VERSION="5"
+readonly TOOLS_DIR="Tools"
+readonly USAGE_FILE="USAGE.md"
+readonly USAGE_URL="https://pasteio.com/xuCvIkXdNRIB"
+
+readonly EXIT_SUCCESS=0
+readonly EXIT_INVALID_INPUT=2
+readonly EXIT_RUNTIME_ERROR=3
+readonly EXIT_USAGE_ERROR=64
+
+log() {
+  printf '[INFO] %s\n' "$*"
+}
+
+warn() {
+  printf '[WARN] %s\n' "$*" >&2
+}
+
+err() {
+  printf '[ERROR] %s\n' "$*" >&2
+}
+
+show_banner() {
+  clear >/dev/null 2>&1 || true
+  cat <<'BANNER'
+███████╗██╗  ██╗██████╗ ██╗    ██╗   ████████╗ ██████╗  ██████╗ ██╗
+██╔════╝██║  ██║██╔══██╗██║    ██║   ╚══██╔══╝██╔═══██╗██╔═══██╗██║
+███████╗███████║██║  ██║██║ █╗ ██║█████╗██║   ██║   ██║██║   ██║██║
+╚════██║██╔══██║██║  ██║██║███╗██║╚════╝██║   ██║   ██║██║   ██║██║
 ███████║██║  ██║██████╔╝╚███╔███╔╝      ██║   ╚██████╔╝╚██████╔╝███████╗
-╚══════╝╚═╝  ╚═╝╚═════╝  ╚══╝╚══╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝ v3
-  Coded by Shadowhacks
-  github: https://github.com/nischal-sketch21
-\033[33;4mVersion:\033[0m 3            \033[33;4mCTRL+C:\033[0m exit          \033[33;4mAuthor:\033[0m Shadowhacks
+╚══════╝╚═╝  ╚═╝╚═════╝  ╚══╝╚══╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
+BANNER
+  printf 'Version: %s\n\n' "$VERSION"
+}
 
-\e[37m[1]\e[36m Requests & Update         \e[37m[2]\e[36m Phishing Tool				
-\e[37m[3]\e[36m WebCam Hack                   \e[37m[4]\e[36m User Find					
-\e[37m[5]\e[36m Gmail Bomber		  \e[37m[6]\e[36m DDOS Attack			
-\e[37m[7]\e[36m How to use?	          \e[37m[8]\e[36m Uninstall the downloaded programs		
-\e[37m[9]\e[36m Ip Info	                  \e[37m[10]\e[36m dorks-eye
-\e[37m[11]\e[36m ghost_eye                    \e[37m[12]\e[36m RED_HAWK
-\e[37m[13]\e[36m VirusCrafter                 \e[37m[14]\e[36m Info-Site
-\e[37m[15]\e[36m BadMod	                  \e[37m[16]\e[36m Facebash
-\e[37m[17]\e[36m DARKARMY                     \e[37m[18]\e[36m N-ANOM
-'
+show_menu() {
+  cat <<'MENU'
+[1] Prepare local tools directory
+[2] Show local usage guide
+[3] Remove downloaded tools
+[0] Exit
+MENU
+}
 
+show_help() {
+  cat <<'HELP'
+Usage:
+  bash shdwhack.sh [option]
 
-#Option Selection
+Options:
+  --prepare-tools   Create local Tools/ directory
+  --remove-tools    Remove local Tools/ directory
+  --usage           Print local usage guide
+  --open-guide      Open online usage guide in browser
+  --help            Show this help message
 
+Exit codes:
+  0   Success
+  2   Invalid user input
+  3   Runtime error
+  64  Invalid CLI usage
+HELP
+}
 
-read -p "Number: " islem
-if [[ $islem == 1 || $islem == 01 ]]; then
-clear
+ensure_tools_dir() {
+  mkdir -p "$TOOLS_DIR"
+  log "Directory '$TOOLS_DIR' is ready."
+}
 
-echo -e "\033[47;31;5m Installing update and requirements...\033[0m"
-sleep 5
-pkg install git -y
-pkg install python python2 -y
-pkg install pip pip2 -y
-pkg install curl -y
-apt update
-apt upgrade -y
-clear
-echo -e "\033[47;3;35m Full update...\033[0m"
-sleep 3
-bash tga.sh
+remove_tools_dir() {
+  rm -rf "$TOOLS_DIR"
+  log "Directory '$TOOLS_DIR' removed."
+}
 
-elif [[ $islem == 2 || $islem == 02 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/htr-tech/zphisher
-cd zphisher
-bash zphisher.sh
+show_local_usage() {
+  if [[ -f "$USAGE_FILE" ]]; then
+    cat "$USAGE_FILE"
+  else
+    err "Usage file '$USAGE_FILE' was not found."
+    return "$EXIT_RUNTIME_ERROR"
+  fi
+}
 
-elif [[ $islem == 3 || $islem == 03 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/techchipnet/CamPhish
-cd CamPhish
-bash camphish.sh
+open_online_usage_guide() {
+  if command -v xdg-open >/dev/null 2>&1; then
+    xdg-open "$USAGE_URL" >/dev/null 2>&1 || {
+      warn "Failed to open browser."
+      warn "Open manually: $USAGE_URL"
+      return "$EXIT_RUNTIME_ERROR"
+    }
+  else
+    warn "xdg-open is unavailable. Open manually: $USAGE_URL"
+    return "$EXIT_RUNTIME_ERROR"
+  fi
+}
 
-elif [[ $islem == 4 || $islem == 04 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/xHak9x/finduser
-cd finduser
-bash finduser.sh
-       
-elif [[ $islem == 5 || $islem == 05 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/palahsu/MBomb.git
-cd MBomb
-python MBomb.py
+handle_selection() {
+  local selection="$1"
+  case "$selection" in
+    1)
+      ensure_tools_dir
+      ;;
+    2)
+      show_local_usage
+      ;;
+    3)
+      remove_tools_dir
+      ;;
+    0)
+      log "Exiting."
+      exit "$EXIT_SUCCESS"
+      ;;
+    *)
+      err "Invalid selection: '$selection'. Please choose 0, 1, 2 or 3."
+      return "$EXIT_INVALID_INPUT"
+      ;;
+  esac
+}
 
-elif [[ $islem == 6 || $islem == 06 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-pip3 install requests pysocks
-git clone https://github.com/Leeon123/CC-attack
-cd CC-attack
-python3 cc.py
+run_non_interactive() {
+  local option="$1"
+  case "$option" in
+    --prepare-tools)
+      ensure_tools_dir
+      ;;
+    --remove-tools)
+      remove_tools_dir
+      ;;
+    --usage)
+      show_local_usage
+      ;;
+    --open-guide)
+      open_online_usage_guide
+      ;;
+    --help)
+      show_help
+      ;;
+    *)
+      err "Unknown option: $option"
+      show_help
+      return "$EXIT_USAGE_ERROR"
+      ;;
+  esac
+}
 
-elif [[ $islem == 7 || $islem == 07 ]]; then
-clear
-xdg-open https://pasteio.com/xuCvIkXdNRIB
-bash tga.sh
+main() {
+  if [[ $# -gt 0 ]]; then
+    run_non_interactive "$1"
+    exit $?
+  fi
 
- 
-elif [[ $islem == 8 ]]; then
-        clear
+  ensure_tools_dir
 
-echo -e "\033[47;3;35m REMOVING DOWNLOADED PROGRAMS...\033[0m"
-sleep 3 
-rm -rf Tools
+  while true; do
+    show_banner
+    show_menu
 
-bash tga.sh
+    read -r -p "Number: " selection || {
+      err "Failed to read input."
+      exit "$EXIT_RUNTIME_ERROR"
+    }
 
-elif [[ $islem == 9 || $islem == 09 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/ahgaurel1/ipinfo
-cd ipinfo
-bash install.sh
-python3 ipinfo.py
+    if [[ ! "$selection" =~ ^[0-9]+$ ]]; then
+      err "Input must be numeric."
+      sleep 1
+      continue
+    fi
 
-elif [[ $islem == 10 || $islem == 010 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/BullsEye0/dorks-eye.git
-cd dorks-eye
-pip install -r requirements.txt
-python3 dorks-eye.py
+    if ! handle_selection "$selection"; then
+      sleep 1
+      continue
+    fi
 
-elif [[ $islem == 11 || $islem == 011 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/BullsEye0/ghost_eye.git
-cd ghost_eye
-pip install -r requirements.txt
-python3 ghost_eye.py
+    printf '\nPress Enter to continue...'
+    read -r _ || true
+  done
+}
 
-elif [[ $islem == 12 || $islem == 012 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/Tuhinshubhra/RED_HAWK
-cd RED_HAWK
-php rhawk.php
-
-elif [[ $islem == 13 || $islem == 013 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/Devil-Tigers/TigerVirus
-apt update
-apt upgrade -y
-pkg install git -y
-cd TigerVirus
-bash TigerVirus.sh
-
-elif [[ $islem == 14 || $islem == 014 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-pkg install curl -y
-upgrade -y
-pkg install git -y
-git clone https://github.com/king-hacking/info-site.git
-cd info-site
-bash info.sh
-
-elif [[ $islem == 15 || $islem == 015 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-sudo apt-get update
-sudo apt-get install php
-sudo apt-get install php-curl
-git clone https://github.com/MrSqar-Ye/BadMod.git
-cd BadMod
-chmod u+x INSTALL
-chmod u+x BadMod.php
-sudo php BadMod.php
-
-elif [[ $islem == 16 || $islem == 016 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-git clone https://github.com/fu8uk1/facebash
-cd facebash
-chmod +x facebash.sh
-service tor start
-sudo ./facebash.sh
-
-elif [[ $islem == 17 || $islem == 017 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-pkg install git
-pkg install python2
-git clone https://github.com/D4RK-4RMY/DARKARMY
-cd DARKARMY
-chmod +x darkarmy.py
-python2 darkarmy.py
-
-elif [[ $islem == 18 || $islem == 018 ]]; then
-clear
-echo -e "\033[47;3;35m Installation may take some time\033[0m"
-sleep 3
-cd Tools
-apt update && apt upgrade 
-pkg install git -y
-pkg install python && pkg install python3 -y
-git clone https://github.com/Nabil-Official/N-ANOM
-pip3 install requests
-cd N-ANOM 
-python3 n-anom.py
-
-else   
-	clear
-        echo -e '\033[36;40;1m You have entered the wrong code'	
-	sleep 1
-	clear 
-	bash tga.sh
-fi
+main "$@"
