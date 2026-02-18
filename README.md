@@ -1,27 +1,29 @@
 Author : nischal-sketch21
-### Version 3
+### Version 4
 ![image](Shdwtool.png)
 
-# Hacking Tools
-This Tools help you with ethical hacking, Social media hack, phone info, Gmail attack, phone number attack, user discovery, Anonymous-sms, Webcam Hack, Powerful DDOS attack tool.
+# Shdwhack (hardened maintenance edition)
+This repository now ships a **security-hardened maintenance shell** that focuses on safe local operations only.
 
-# Operating System Requirements
-Works on any of the following operating systems:
+## What changed
+- Legacy offensive actions were disabled for security/compliance.
+- Menu handling was rewritten with validated numeric input.
+- Missing `tga.sh` loops were removed.
+- Script now runs with strict shell mode (`set -euo pipefail`).
 
-• Android (Using the Termux App)
+## Current menu options
+- `1` Prepare local `Tools/` directory
+- `2` Open usage guide URL
+- `3` Remove local `Tools/` directory
+- `0` Exit
 
-• Kali-Linux (Debian Based Systems)
+## Operating system requirements
+Works on most Linux shells with `bash`.
 
-# How to Install
-* Open the terminal and type `<pkg install git>`
-* Then`<git clone https://github.com/nischal-sketch21/Shdwhack.git>`
-* `<cd Shdwhack>`
-* `<bash Shdwhack.sh>`
+## Run
+```bash
+bash shdwhack.sh
+```
 
-
-# Warning
-
-We are not responsible for any misuse or damage caused by this program. Use this tool at your own risk!
-
-
-❤️ Support me:
+## Security note
+Use this project only for legal and authorized security learning workflows.
